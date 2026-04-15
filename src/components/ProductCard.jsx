@@ -1,94 +1,65 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-const ProductCard = ({ item }) => {
-  const [count, setCount] = useState(0);
+const ProductCard = ({ item, addToCart }) => {
+  const [count, setCount] = useState(() => {
+    const saved = localStorage.getItem(`item_count_${item.id}`);
+    return saved ? parseInt(saved) : 0;
+  });
   const [isHovered, setIsHovered] = useState(false);
 
-  const cardStyle = {
-    backgroundColor: '#fff',
-    padding: '20px',
-    borderRadius: '16px',
-    width: '280px',
-    textAlign: 'center',
-    transition: 'all 0.3s ease', 
-    
-    boxShadow: isHovered 
-      ? '0 10px 20px rgba(212, 175, 55, 0.2)' 
-      : '0 4px 6px rgba(0,0,0,0.05)',        
-    transform: isHovered ? 'translateY(-5px)' : 'none',
-    cursor: 'pointer'
+  useEffect(() => {
+    localStorage.setItem(`item_count_${item.id}`, count);
+  }, [count, item.id]);
+
+  const handleAddClick = () => {
+    if (count > 0) {
+      addToCart(count);
+      alert(`Додано ${count} шт. до кошика!`);
+    }
   };
 
-  const counterButtonStyle = {
-    backgroundColor: '#f1f5f9',
-    color: '#334155',
-    border: '1px solid #e2e8f0',
-    padding: '8px 15px',
-    borderRadius: '8px',
-    cursor: 'pointer',
-    fontWeight: 'bold',
-    fontSize: '1.2rem',
-    transition: 'background 0.2s'
+  const handleRemove = () => {
+    setCount(0);
+    localStorage.setItem(`item_count_${item.id}`, 0);
   };
 
   return (
     <div 
-      style={cardStyle}
-      onMouseEnter={() => setIsHovered(true)}  
-      onMouseLeave={() => setIsHovered(false)} 
+      style={{
+        backgroundColor: '#fff', padding: '20px', borderRadius: '16px', width: '280px', textAlign: 'center',
+        transition: 'all 0.3s ease', boxShadow: isHovered ? '0 10px 20px rgba(212, 175, 55, 0.2)' : '0 4px 6px rgba(0,0,0,0.05)',
+        transform: isHovered ? 'translateY(-5px)' : 'none'
+      }}
+      onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}
     >
-      <div style={{ width: '100%', height: '250px', overflow: 'hidden', borderRadius: '12px', marginBottom: '15px' }}>
-        <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+      <img src={item.image} alt={item.name} style={{ width: '100%', height: '250px', objectFit: 'cover', borderRadius: '12px' }} />
+      <h3 style={{ fontSize: '1.2rem', margin: '10px 0' }}>{item.name}</h3>
+      <div style={{ marginBottom: '15px' }}>
+        <span style={{ textDecoration: 'line-through', color: '#94a3b8', marginRight: '10px' }}>{item.oldPrice} грн</span>
+        <span style={{ color: '#D4AF37', fontWeight: 'bold' }}>{item.price} грн</span>
       </div>
-      
-      <h3 style={{ fontSize: '1.3rem', margin: '0 0 10px', color: '#1e293b' }}>{item.name}</h3>
-      <p style={{ color: '#D4AF37', fontWeight: 'bold', fontSize: '1.2rem', marginBottom: '20px' }}>{item.price.toLocaleString()} грн</p>
-      
-      {/* Блок вибору кількості */}
+
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px', marginBottom: '15px' }}>
-        {/* Кнопка Мінус */}
-        <button 
-          onClick={() => setCount(count > 0 ? count - 1 : 0)}
-          style={counterButtonStyle}
-          onMouseOver={(e) => e.target.style.backgroundColor = '#e2e8f0'}
-          onMouseOut={(e) => e.target.style.backgroundColor = '#f1f5f9'}
-        >
-          −
-        </button>
-        
-        {/* Кількість */}
-        <span style={{ fontSize: '1.3rem', fontWeight: '600', color: '#1e293b', minWidth: '30px' }}>
-          {count}
-        </span>
-        
-        {/* Кнопка Плюс */}
-        <button 
-          onClick={() => setCount(count + 1)}
-          style={counterButtonStyle}
-          onMouseOver={(e) => e.target.style.backgroundColor = '#e2e8f0'}
-          onMouseOut={(e) => e.target.style.backgroundColor = '#f1f5f9'}
-        >
-          +
-        </button>
+        <button onClick={() => setCount(count > 0 ? count - 1 : 0)} style={{ padding: '8px 15px', cursor: 'pointer' }}>−</button>
+        <span style={{ fontWeight: 'bold' }}>{count}</span>
+        <button onClick={() => setCount(count + 1)} style={{ padding: '8px 15px', cursor: 'pointer' }}>+</button>
       </div>
 
       {count > 0 && (
-        <button style={{
-          backgroundColor: '#D4AF37',
-          color: 'white',
-          border: 'none',
-          padding: '12px 25px',
-          borderRadius: '25px',
-          cursor: 'pointer',
-          fontWeight: '600',
-          width: '100%',
-          transition: 'background 0.2s'
-        }}
-          onMouseOver={(e) => e.target.style.backgroundColor = '#B5942F'}
-          onMouseOut={(e) => e.target.style.backgroundColor = '#D4AF37'}
-        >
-          Додати до кошика ({count})
-        </button>
+        <>
+          <button 
+            onClick={handleAddClick}
+            style={{ backgroundColor: '#D4AF37', color: 'white', border: 'none', padding: '10px', borderRadius: '25px', width: '100%', cursor: 'pointer', fontWeight: 'bold' }}
+          >
+            Додати до кошика
+          </button>
+          <button 
+            onClick={handleRemove}
+            style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '0.8rem', marginTop: '10px', textDecoration: 'underline' }}
+          >
+            Видалити вибір
+          </button>
+        </>
       )}
     </div>
   );
