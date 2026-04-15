@@ -17,16 +17,14 @@ function App() {
     });
   };
 
-  // Функція для повного очищення кошика (через клік на іконку в Header)
   const clearCart = () => {
     if (window.confirm("Очистити кошик?")) {
       setCartCount(0);
       localStorage.setItem('total_cart_count', 0);
-      // Очищуємо всі локальні лічильники в пам'яті
       Object.keys(localStorage).forEach(key => {
         if (key.startsWith('item_count_')) localStorage.setItem(key, 0);
       });
-      window.location.reload(); // Перезавантаження для синхронізації карток
+      window.location.reload();
     }
   };
 
