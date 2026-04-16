@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Header = ({ cartCount, clearCart }) => {
   const headerStyle = {
@@ -7,22 +8,27 @@ const Header = ({ cartCount, clearCart }) => {
     position: 'sticky', top: 0, zIndex: 1000
   };
 
-  const logoStyle = { fontSize: '1.5rem', fontWeight: 'bold', color: '#D4AF37', textTransform: 'uppercase' };
+  const logoStyle = { 
+    fontSize: '1.5rem', fontWeight: 'bold', color: '#D4AF37', 
+    textTransform: 'uppercase', textDecoration: 'none' 
+  };
   const navListStyle = { display: 'flex', listStyle: 'none', gap: '30px', margin: 0, padding: 0, alignItems: 'center' };
-  const linkStyle = { textDecoration: 'none', color: '#334155', fontSize: '0.85rem', fontWeight: '600' };
+  const linkStyle = { textDecoration: 'none', color: '#334155', fontSize: '0.9rem', fontWeight: '600' };
 
   return (
     <header style={headerStyle}>
-      <div style={logoStyle}>Jewelry Store</div>
+      <Link to="/" style={logoStyle}>Jewelry Store</Link>
+      
       <nav>
         <ul style={navListStyle}>
-          <li><a href="#" style={linkStyle}>Головна</a></li>
-          <li><a href="#" style={linkStyle}>Каталог</a></li>
-          <li><a href="#" style={linkStyle}>Про нас</a></li>
+          <li><Link to="/" style={linkStyle}>Головна</Link></li>
+          <li><Link to="/catalog" style={linkStyle}>Каталог</Link></li>
+          <li><Link to="/about" style={linkStyle}>Про нас</Link></li>
+          
           <li 
             onClick={clearCart} 
             style={{ position: 'relative', cursor: 'pointer', marginLeft: '20px' }}
-            title="Натисніть, щоб очистити кошик"
+            title="Очистити кошик"
           >
             <span style={{ fontSize: '1.4rem' }}>🛒</span>
             {cartCount > 0 && (
