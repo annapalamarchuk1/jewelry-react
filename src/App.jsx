@@ -11,24 +11,21 @@ const products = [
   { 
     id: 1, 
     name: "Золота каблучка", 
-    price: 12750, 
-    oldPrice: 15000, 
+    price: 15000, 
     image: "https://minimal.com.ua/wp-content/uploads/2024/01/k611zh-br-dm-m-800x800.jpg",
     description: "Вишукана каблучка з червоного золота 585 проби. Класичний дизайн з діамантовим огранюванням, що підкреслить вашу елегантність."
   },
   { 
     id: 2, 
     name: "Класичне кольє", 
-    price: 21250, 
-    oldPrice: 25000, 
+    price: 22500, 
     image: "https://img.ukrzoloto.ua/images/pr/520_520/c6b84dfbfe95c5f2cc6b091b8882ec07/1769460786/UZ31735191_000176405.webp",
     description: "Кольє ручної роботи з білого золота. Ідеальний вибір для особливих подій та вечірніх образів."
   },
   { 
     id: 3, 
     name: "Сережки 'Грація'", 
-    price: 6800, 
-    oldPrice: 8000, 
+    price: 8000, 
     image: "https://goldensilver.ua/image/cache/catalog/deva1/5/TR-02-00015PZ-90-1000x1000.jpg",
     description: "Легкі та витончені сережки зі срібла з позолотою. Додадуть ніжного сяйва вашому повсякденному стилю."
   }

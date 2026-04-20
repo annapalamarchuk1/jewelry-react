@@ -42,12 +42,11 @@ const ProductCard = ({ item, addToCart }) => {
       onMouseEnter={() => setIsHovered(true)} 
       onMouseLeave={() => setIsHovered(false)}
     >
-      <img src={item.image} alt={item.name} style={{ width: '100%', height: '250px', objectFit: 'cover', borderRadius: '12px' }} />
-      <h3 style={{ fontSize: '1.2rem', margin: '10px 0' }}>{item.name}</h3>
-      <div style={{ marginBottom: '15px' }}>
-        <span style={{ textDecoration: 'line-through', color: '#94a3b8', marginRight: '10px' }}>{item.oldPrice} грн</span>
-        <span style={{ color: '#D4AF37', fontWeight: 'bold' }}>{item.price} грн</span>
-      </div>
+     <img src={item.image} alt={item.name} style={{ width: '100%', height: '250px', objectFit: 'cover', borderRadius: '12px' }} />
+<h3 style={{ fontSize: '1.2rem', margin: '10px 0' }}>{item.name}</h3>
+<div style={{ marginBottom: '15px' }}>
+  <span style={{ color: '#D4AF37', fontWeight: 'bold', fontSize: '1.1rem' }}>{item.price} грн</span>
+</div>
 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px', marginBottom: '15px' }}>
         <button onClick={() => setCount(count > 0 ? count - 1 : 0)} style={{ padding: '8px 15px', cursor: 'pointer' }}>−</button>
