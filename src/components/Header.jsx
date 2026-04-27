@@ -24,6 +24,7 @@ const Header = ({ cartCount, clearCart }) => {
           <li><Link to="/" style={linkStyle}>Головна</Link></li>
           <li><Link to="/catalog" style={linkStyle}>Каталог</Link></li>
           <li><Link to="/about" style={linkStyle}>Про нас</Link></li>
+          <li><Link to="/contacts" style={linkStyle}>Контакти</Link></li> {/* ← додано */}
           
           <li 
             onClick={clearCart} 

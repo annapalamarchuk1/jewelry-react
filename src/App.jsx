@@ -6,6 +6,7 @@ import Footer from './components/Footer';
 import ProductDetails from './pages/ProductDetails';
 import AboutPage from './pages/AboutPage';
 import HomePage from './pages/HomePage';
+import ContactPage from './pages/ContactPage';
 
 const products = [
   { 
@@ -37,13 +38,13 @@ function App() {
     return saved ? parseInt(saved) : 0;
   });
 
- const addToCart = (amount) => {
-  setCartCount(prev => {
-    const newCount = prev + amount;
-    localStorage.setItem('total_cart_count', newCount);
-    return newCount;
-  });
-};
+  const addToCart = (amount) => {
+    setCartCount(prev => {
+      const newCount = prev + amount;
+      localStorage.setItem('total_cart_count', newCount);
+      return newCount;
+    });
+  };
 
   const clearCart = () => {
     if (window.confirm("Очистити кошик?")) {
@@ -63,12 +64,10 @@ function App() {
         
         <Routes>
           <Route path="/" element={<HomePage />} />
-          
           <Route path="/catalog" element={<Main addToCart={addToCart} products={products} />} />
-          
           <Route path="/about" element={<AboutPage />} />
-        
-         <Route path="/product/:id" element={<ProductDetails products={products} />} />
+          <Route path="/contacts" element={<ContactPage />} />
+          <Route path="/product/:id" element={<ProductDetails products={products} />} />
         </Routes>
 
         <Footer />
