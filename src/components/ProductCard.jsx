@@ -14,12 +14,12 @@ const ProductCard = ({ item, addToCart }) => {
   }, [count, item.id]);
 
   const handleAddClick = () => {
-  if (count > 0) {
-    addToCart(count); 
-    setCount(0);  
-    localStorage.setItem(`item_count_${item.id}`, 0); 
-  }
-};
+    if (count > 0) {
+      addToCart(count); 
+      setCount(0);  
+      localStorage.setItem(`item_count_${item.id}`, 0); 
+    }
+  };
 
   const handleRemove = () => {
     addToCart(-count); 
@@ -42,11 +42,15 @@ const ProductCard = ({ item, addToCart }) => {
       onMouseEnter={() => setIsHovered(true)} 
       onMouseLeave={() => setIsHovered(false)}
     >
-     <img src={item.image} alt={item.name} style={{ width: '100%', height: '250px', objectFit: 'cover', borderRadius: '12px' }} />
-<h3 style={{ fontSize: '1.2rem', margin: '10px 0' }}>{item.name}</h3>
-<div style={{ marginBottom: '15px' }}>
-  <span style={{ color: '#D4AF37', fontWeight: 'bold', fontSize: '1.1rem' }}>{item.price} грн</span>
-</div>
+      <img 
+        src={item.image} 
+        alt={item.title} 
+        style={{ width: '100%', height: '250px', objectFit: 'cover', borderRadius: '12px' }} 
+      />
+      <h3 style={{ fontSize: '1.2rem', margin: '10px 0' }}>{item.title}</h3>
+      <div style={{ marginBottom: '15px' }}>
+        <span style={{ color: '#D4AF37', fontWeight: 'bold', fontSize: '1.1rem' }}>{item.price} грн</span>
+      </div>
 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px', marginBottom: '15px' }}>
         <button onClick={() => setCount(count > 0 ? count - 1 : 0)} style={{ padding: '8px 15px', cursor: 'pointer' }}>−</button>
@@ -63,20 +67,20 @@ const ProductCard = ({ item, addToCart }) => {
         </button>
 
         <Link 
-  to={`/product/${item.id}`}
-  style={{ 
-    display: 'inline-block', 
-    padding: '10px', 
-    borderRadius: '25px', 
-    border: '1px solid #d4af37', 
-    color: '#d4af37', 
-    textDecoration: 'none', 
-    fontWeight: 'bold',
-    fontSize: '0.9rem'
-  }}
->
-  Детальніше
-</Link>
+          to={`/product/${item.id}`}
+          style={{ 
+            display: 'inline-block', 
+            padding: '10px', 
+            borderRadius: '25px', 
+            border: '1px solid #d4af37', 
+            color: '#d4af37', 
+            textDecoration: 'none', 
+            fontWeight: 'bold',
+            fontSize: '0.9rem'
+          }}
+        >
+          Детальніше
+        </Link>
       </div>
 
       {count > 0 && (

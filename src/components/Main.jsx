@@ -1,65 +1,80 @@
-import React, { useState, useEffect } from 'react';
-import ProductCard from './ProductCard';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import ProductCard from "./ProductCard";
 
-const Spinner = () => (
-  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '80vh' }}>
-    <div style={{ border: '6px solid #f3f3f3', borderTop: '6px solid #d4af37', borderRadius: '50%', width: '50px', height: '50px', animation: 'spin 1s linear infinite' }}></div>
-    <p style={{ marginTop: '15px', color: '#64748b' }}>Завантаження колекції...</p>
-    <style>{`@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`}</style>
-  </div>
-);
+const API_URL = "http://127.0.0.1:8000";
 
-const Main = ({ addToCart, products }) => {
-  const [isLoading, setIsLoading] = useState(true);
+function Main({ addToCart }) {
+  const [items, setItems] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selected, setSelected] = useState("Всі");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 2000);
-    return () => clearTimeout(timer);
+    axios.get(`${API_URL}/api/categories`)
+      .then(res => {
+        setCategories(["Всі", ...res.data]);
+      })
+      .catch(err => console.error("Помилка категорій:", err));
   }, []);
 
-  if (isLoading) return <Spinner />;
+  useEffect(() => {
+    axios.get(`${API_URL}/api/items`)
+      .then(res => {
+        setItems(res.data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error("Помилка:", err);
+        setLoading(false);
+      });
+  }, []);
+
+  const filtered = selected === "Всі"
+    ? items
+    : items.filter(i => i.category === selected);
 
   return (
-    <main style={{ padding: '60px 8%', backgroundColor: '#f8fafc', minHeight: '80vh' }}>
-      
-      {/* Секція заголовку з усіма стилями */}
-      <div style={{ textAlign: 'center', marginBottom: '50px' }}>
-        <h2 style={{ 
-          fontSize: '2.5rem', 
-          color: '#0f172a', 
-          margin: '0 0 10px', 
-          letterSpacing: '1px' 
-        }}>
-          Каталог
-        </h2>
-        <p style={{ 
-          color: '#64748b', 
-          fontSize: '1.1rem', 
-          maxWidth: '600px', 
-          margin: '0 auto' 
-        }}>
-          Витонченість у кожній деталі. Ми поєднуємо класичну ювелірну майстерність із сучасними трендами, 
-          щоб створювати прикраси, які стають частиною вашої історії.
-        </p>
+    <div style={{ padding: "40px 20px" }}>
+      <div style={{ display: "flex", justifyContent: "center", gap: "12px", marginBottom: "40px" }}>
+        {categories.map(cat => (
+          <button
+            key={cat}
+            onClick={() => setSelected(cat)}
+            style={{
+              padding: "10px 24px",
+              background: selected === cat ? "#D4AF37" : "transparent",
+              color: selected === cat ? "#fff" : "#D4AF37",
+              border: "1px solid #D4AF37",
+              borderRadius: "25px",
+              cursor: "pointer",
+              fontWeight: "bold",
+              fontSize: "0.95rem",
+              transition: "all 0.3s ease"
+            }}
+          >
+            {cat}
+          </button>
+        ))}
       </div>
-      
-      {/* Сітка товарів */}
-      <div style={{ 
-        display: 'flex', 
-        flexWrap: 'wrap', 
-        gap: '40px', 
-        justifyContent: 'center' 
-      }}>
-        {products && products.length > 0 ? (
-          products.map(p => (
-            <ProductCard key={p.id} item={p} addToCart={addToCart} />
-          ))
-        ) : (
-          <p style={{ color: '#64748b' }}>Товари не знайдені</p>
-        )}
-      </div>
-    </main>
+
+      {loading ? (
+        <p style={{ textAlign: "center" }}>Завантаження...</p>
+      ) : (
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(3, 1fr)",
+          gap: "30px",
+          maxWidth: "1000px",
+          margin: "0 auto"
+        }}>
+          {filtered.map(item => (
+            <ProductCard key={item.id} item={item} addToCart={addToCart} />
+          ))}
+        </div>
+      )}
+    </div>
   );
-};
+}
 
 export default Main;

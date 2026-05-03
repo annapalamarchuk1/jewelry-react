@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import axios from 'axios';
 import Header from './components/Header';
 import Main from './components/Main';
 import Footer from './components/Footer';
@@ -8,35 +9,22 @@ import AboutPage from './pages/AboutPage';
 import HomePage from './pages/HomePage';
 import ContactPage from './pages/ContactPage';
 
-const products = [
-  { 
-    id: 1, 
-    name: "Золота каблучка", 
-    price: 15000, 
-    image: "https://minimal.com.ua/wp-content/uploads/2024/01/k611zh-br-dm-m-800x800.jpg",
-    description: "Вишукана каблучка з червоного золота 585 проби. Класичний дизайн з діамантовим огранюванням, що підкреслить вашу елегантність."
-  },
-  { 
-    id: 2, 
-    name: "Класичне кольє", 
-    price: 22500, 
-    image: "https://img.ukrzoloto.ua/images/pr/520_520/c6b84dfbfe95c5f2cc6b091b8882ec07/1769460786/UZ31735191_000176405.webp",
-    description: "Кольє ручної роботи з білого золота. Ідеальний вибір для особливих подій та вечірніх образів."
-  },
-  { 
-    id: 3, 
-    name: "Сережки 'Грація'", 
-    price: 8000, 
-    image: "https://goldensilver.ua/image/cache/catalog/deva1/5/TR-02-00015PZ-90-1000x1000.jpg",
-    description: "Легкі та витончені сережки зі срібла з позолотою. Додадуть ніжного сяйва вашому повсякденному стилю."
-  }
-];
+const API_URL = "http://127.0.0.1:8000";
 
 function App() {
+  const [products, setProducts] = useState([]);
+  
   const [cartCount, setCartCount] = useState(() => {
     const saved = localStorage.getItem('total_cart_count');
     return saved ? parseInt(saved) : 0;
   });
+
+
+  useEffect(() => {
+    axios.get(`${API_URL}/api/items`)
+      .then(res => setProducts(res.data))
+      .catch(err => console.error("Помилка:", err));
+  }, []);
 
   const addToCart = (amount) => {
     setCartCount(prev => {
