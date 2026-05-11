@@ -8,13 +8,12 @@ function Main({ addToCart }) {
   const [items, setItems] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selected, setSelected] = useState("Всі");
+  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios.get(`${API_URL}/api/categories`)
-      .then(res => {
-        setCategories(["Всі", ...res.data]);
-      })
+      .then(res => setCategories(["Всі", ...res.data]))
       .catch(err => console.error("Помилка категорій:", err));
   }, []);
 
@@ -30,13 +29,34 @@ function Main({ addToCart }) {
       });
   }, []);
 
-  const filtered = selected === "Всі"
-    ? items
-    : items.filter(i => i.category === selected);
+  const filtered = items
+    .filter(i => selected === "Всі" || i.category === selected)
+    .filter(i => i.title.toLowerCase().includes(search.toLowerCase()));
 
   return (
     <div style={{ padding: "40px 20px" }}>
-      <div style={{ display: "flex", justifyContent: "center", gap: "12px", marginBottom: "40px" }}>
+
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: "24px" }}>
+        <input
+          type="text"
+          placeholder="Пошук за назвою..."
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          style={{
+            width: "100%",
+            maxWidth: "400px",
+            padding: "10px 20px",
+            border: "1px solid #D4AF37",
+            borderRadius: "25px",
+            fontSize: "0.95rem",
+            outline: "none",
+            color: "#333"
+          }}
+        />
+      </div>
+
+
+      <div style={{ display: "flex", justifyContent: "center", gap: "12px", marginBottom: "40px", flexWrap: "wrap" }}>
         {categories.map(cat => (
           <button
             key={cat}
@@ -60,6 +80,8 @@ function Main({ addToCart }) {
 
       {loading ? (
         <p style={{ textAlign: "center" }}>Завантаження...</p>
+      ) : filtered.length === 0 ? (
+        <p style={{ textAlign: "center", color: "#888" }}>Нічого не знайдено</p>
       ) : (
         <div style={{
           display: "grid",

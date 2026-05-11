@@ -26,18 +26,16 @@ const Header = ({ cartCount, clearCart }) => {
           <li><Link to="/about" style={linkStyle}>Про нас</Link></li>
           <li><Link to="/contacts" style={linkStyle}>Контакти</Link></li> 
           
-          <li 
-            onClick={clearCart} 
-            style={{ position: 'relative', cursor: 'pointer', marginLeft: '20px' }}
-            title="Очистити кошик"
-          >
-            <span style={{ fontSize: '1.4rem' }}>🛒</span>
-            {cartCount > 0 && (
-              <span style={{
-                position: 'absolute', top: '-8px', right: '-10px', backgroundColor: '#D4AF37',
-                color: 'white', borderRadius: '50%', padding: '2px 6px', fontSize: '0.7rem', border: '2px solid #fff'
-              }}>{cartCount}</span>
-            )}
+          <li style={{ position: 'relative', marginLeft: '20px' }}>
+            <Link to="/cart" style={{ textDecoration: 'none' }}>
+              <span style={{ fontSize: '1.4rem' }}>🛒</span>
+              {cartCount > 0 && (
+                <span style={{
+                  position: 'absolute', top: '-8px', right: '-10px', backgroundColor: '#D4AF37',
+                  color: 'white', borderRadius: '50%', padding: '2px 6px', fontSize: '0.7rem', border: '2px solid #fff'
+                }}>{cartCount}</span>
+              )}
+            </Link>
           </li>
         </ul>
       </nav>

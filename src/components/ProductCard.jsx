@@ -1,30 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const ProductCard = ({ item, addToCart }) => {
-  const [count, setCount] = useState(() => {
-    const saved = localStorage.getItem(`item_count_${item.id}`);
-    return saved ? parseInt(saved) : 0;
-  });
-  
+  const [count, setCount] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
-
-  useEffect(() => {
-    localStorage.setItem(`item_count_${item.id}`, count);
-  }, [count, item.id]);
+  const [added, setAdded] = useState(false);
 
   const handleAddClick = () => {
     if (count > 0) {
-      addToCart(count); 
-      setCount(0);  
-      localStorage.setItem(`item_count_${item.id}`, 0); 
+      addToCart(item, count);
+      setCount(0);
+      setAdded(true);
+      setTimeout(() => setAdded(false), 2000);
     }
-  };
-
-  const handleRemove = () => {
-    addToCart(-count); 
-    setCount(0);
-    localStorage.setItem(`item_count_${item.id}`, 0);
   };
 
   return (
@@ -61,9 +49,19 @@ const ProductCard = ({ item, addToCart }) => {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         <button 
           onClick={handleAddClick}
-          style={{ backgroundColor: '#D4AF37', color: 'white', border: 'none', padding: '10px', borderRadius: '25px', width: '100%', cursor: 'pointer', fontWeight: 'bold' }}
+          style={{ 
+            backgroundColor: added ? '#4caf50' : '#D4AF37', 
+            color: 'white', 
+            border: 'none', 
+            padding: '10px', 
+            borderRadius: '25px', 
+            width: '100%', 
+            cursor: 'pointer', 
+            fontWeight: 'bold',
+            transition: 'background 0.3s'
+          }}
         >
-          Додати до кошика
+          {added ? '✓ Додано!' : 'Додати до кошика'}
         </button>
 
         <Link 
@@ -82,15 +80,6 @@ const ProductCard = ({ item, addToCart }) => {
           Детальніше
         </Link>
       </div>
-
-      {count > 0 && (
-        <button 
-          onClick={handleRemove}
-          style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '0.8rem', marginTop: '10px', textDecoration: 'underline' }}
-        >
-          Видалити вибір
-        </button>
-      )}
     </div>
   );
 };
